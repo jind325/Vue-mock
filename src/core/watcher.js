@@ -13,8 +13,10 @@ export default class Watcher {
         // 就是本watcher监听了哪些主题
         this.depIds = {};
         // 备份当前的值，以便缓冲变化
-        //首次初始化watcher的时候, 这一步会储存当前的data中的expression的值, 在获取值之前, 先把主题对象的target
-        //指向该watcher, 意味着当前watcherzhu, 然后在data中劫持的getter中
+        //首次初始化watcher的时候, 这一步会储存当前的data中的expression的值, 
+        //在获取值之前, 先把主题对象的target
+        //指向该watcher, 当执行取值操作的时候, 就会触发在oberserver中劫持的getter, 触发订阅管理器的
+        //depend方法, 就会将这个watcher添加到该订阅管理器对象的订阅者列表当中了 
         this.oldValue = this.get();
     }
     //更新本node的视图

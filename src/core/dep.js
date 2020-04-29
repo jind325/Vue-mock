@@ -2,12 +2,12 @@ import Watcher from './watcher';
 
 let uid = 0;
 
-//TODO 主题对象
+//主题对象
 export default class Dep {
-    //这个属性是干嘛用的?(不能被继承只能直接调用)
-    //暂时发现的是target内部都是在observer中出创建的new Dep()
+    //每一个watcher都会订阅一个主题, 订阅的主题就是data中的一个属性, 这里这个对象就是订阅管理器,
+    //每创建一个oberserver会对应一个主题管理器dep, 并且在劫持的对象属性的getter内触发
+    //订阅者wactcher的addDep方法, 就会在该dep的订阅者名单中添加一个新的订阅者即watcher对象
     static target;
-
     constructor () {
         //所有订阅者的编号
         this.id = uid++;
@@ -25,10 +25,11 @@ export default class Dep {
             this.subs.splice(index, 1);
         }
     }
-    //没看懂, 暂时认为是在订阅者名单中间添加this， 新的观察者
-    // 这个方法可以理解为, 主题对象, 
+    //想当于触发当前target(就是watcher对象的实例)的addDep方法, 即通过dep.addSub方法将watcher添加到
+    //订阅者名单之列
     depend () {
-        // Dep.target目标是一个watcher, 调用watcher.addDep(depThis), 相当于depThis.addSub(watcher)
+        // Dep.target目标是一个watcher, 调用watcher.addDep(depThis), 
+        //相当于depThis.addSub(watcher)
         Dep.target.addDep(this);
     }
 
